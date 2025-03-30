@@ -29,17 +29,20 @@ app = Client("Harami", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
 # Accept all join requests
 @app.on_message(filters.command("acceptall"))
-def accept_all_requests(client, message):
+async def accept_all_requests(client, message):
     chat_id = message.chat.id
     approved_count = 0
     try:
-        for request in client.get_chat_join_requests(chat_id):
-            client.approve_chat_join_request(chat_id, request.from_user.id)
+        join_requests = await client.get_chat_join_requests(chat_id)
+        if not join_requests:
+            await message.reply_text("❌ No pending join requests.")
+            return
+        for request in join_requests:
+            await client.approve_chat_join_request(chat_id, request.from_user.id)
             approved_count += 1
+        await message.reply_text(f"✅ Approved {approved_count} join requests!")
     except Exception as e:
-        message.reply_text(f"Error: {str(e)}")
-        return
-    message.reply_text(f"Approved {approved_count} join requests!")
+        await message.reply_text(f"❌ Error: {str(e)}")
 
 # Love Calculator Command
 @app.on_message(filters.command("love"))
