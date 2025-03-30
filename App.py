@@ -10,6 +10,22 @@ SESSION_STRING = os.getenv("SESSION_STRING", "BQBuoD8AUwOve46dl-Ukg7F1uNCBoRBTJC
 # Initialize Pyrogram Userbot
 app = Client("UserbotSession", api_id=API_ID, api_hash=API_HASH, session_string=SESSION_STRING)
 
+@app.on_message(filters.command("ping") & filters.me)
+async def ping(client, message):
+    await message.reply_text("🏓 Pong!")
+
+@app.on_message(filters.command("myadminrights") & filters.me)
+async def check_admin_rights(client, message):
+    chat_member = await client.get_chat_member(message.chat.id, client.me.id)
+    
+    if chat_member.status in ["administrator", "creator"]:
+        rights = chat_member.privileges
+        await message.reply_text(f"✅ You are an admin!\n\n**Your Rights:**\n{rights}")
+    else:
+        await message.reply_text("❌ You are not an admin in this group.")
+
+
+
 @app.on_message(filters.command("acceptall") & filters.me)
 async def accept_all_requests(client, message):
     chat_id = message.chat.id
