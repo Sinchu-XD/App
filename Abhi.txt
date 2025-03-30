@@ -1,0 +1,8 @@
+pyrogram
+gtts
+google-genai
+telethon
+openai
+edge_tts
+imageio
+cairosvg
