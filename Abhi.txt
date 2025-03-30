@@ -1,4 +1,4 @@
-pyrogram
+pyrofork
 gtts
 google-genai
 telethon
